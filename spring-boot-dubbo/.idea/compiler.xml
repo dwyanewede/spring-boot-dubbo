@@ -6,11 +6,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-boot-dubbo" />
+        <module name="spring-boot-dubbo-api" />
+        <module name="spring-boot-dubbo-consumer" />
+        <module name="spring-boot-dubbo-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spring-boot-dubbo" target="1.8" />
+      <module name="spring-boot-dubbo-api" target="1.8" />
+      <module name="spring-boot-dubbo-consumer" target="1.8" />
+      <module name="spring-boot-dubbo-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
