@@ -3,6 +3,7 @@ package com.sxs.consumer.spring.boot.dubbo.configure;
 import com.sxs.consumer.spring.boot.dubbo.consumer.ServiceConsumer;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.RegistryConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,13 +18,22 @@ import org.springframework.context.annotation.Configuration;
 //@DubboComponentScan
 public class ConsumerConfiguration {
 
+
+    @Value("${zookeeper.address}")
+    private String zkAddress;
+    @Value("${zookeeper.client}")
+    private String zkClient;
+    @Value("${dubbo.consumer.name}")
+    private String consumerName;
+
+
     /**
      * 当前应用配置
      */
     @Bean("dubbo-consumer")
     public ApplicationConfig applicationConfig() {
         ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("dubbo-consumer");
+        applicationConfig.setName(consumerName);
         return applicationConfig;
     }
 
@@ -33,8 +43,8 @@ public class ConsumerConfiguration {
     @Bean
     public RegistryConfig registryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("zookeeper://192.168.125.1:2181");
-        registryConfig.setClient("curator");
+        registryConfig.setAddress(zkAddress);
+        registryConfig.setClient(zkClient);
         return registryConfig;
     }
 

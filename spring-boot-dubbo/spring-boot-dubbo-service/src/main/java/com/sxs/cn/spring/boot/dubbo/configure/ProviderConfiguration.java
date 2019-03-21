@@ -4,6 +4,7 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,13 +25,27 @@ import org.springframework.transaction.support.SimpleTransactionStatus;
 @Configuration
 public class ProviderConfiguration {
 
+    @Value("${zookeeper.address}")
+    private String zkAddress;
+    @Value("${zookeeper.client}")
+    private String zkClient;
+    @Value("${dubbo.provier.name}")
+    private String providerName;
+    @Value("${dubbo.provier.owner}")
+    private String providerOwner;
+    @Value("${dubbo.protocol.name}")
+    private String protocolName;
+    @Value("${dubbo.protocol.port}")
+    private int protocolPort;
+
     /**
      * 当前应用配置
      */
     @Bean("dubbo-provider")
     public ApplicationConfig applicationConfig() {
         ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("dubbo-provider");
+        applicationConfig.setName(providerName);
+        applicationConfig.setOwner(providerOwner);
         return applicationConfig;
     }
 
@@ -40,7 +55,7 @@ public class ProviderConfiguration {
     @Bean("my-registry")
     public RegistryConfig registryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("zookeeper://192.168.125.1:2181");
+        registryConfig.setAddress(zkAddress);
         registryConfig.setClient("curator");
         return registryConfig;
     }
@@ -51,8 +66,8 @@ public class ProviderConfiguration {
     @Bean("dubbo")
     public ProtocolConfig protocolConfig() {
         ProtocolConfig protocolConfig = new ProtocolConfig();
-        protocolConfig.setName("dubbo");
-        protocolConfig.setPort(12345);
+        protocolConfig.setName(protocolName);
+        protocolConfig.setPort(protocolPort);
         return protocolConfig;
     }
 
