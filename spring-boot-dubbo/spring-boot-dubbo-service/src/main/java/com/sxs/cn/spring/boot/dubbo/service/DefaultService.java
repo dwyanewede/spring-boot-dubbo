@@ -41,19 +41,32 @@ public class DefaultService implements HelloService {
         return "Hello " + name;
     }
 
+    // sortSet方式存取数据
+    //Set<Object> value = redisUtil.getSorted(key,0,-1);
     @Override
     public Collection<HelloMessage> getHelloMsg(String key) {
-        HelloMessage message = DBMap.get(key);
-//        Set<Object> value = redisUtil.getSorted(key,0,-1);
-        // TODO 根据value取出对应实体
-        return Collections.singleton(message);
+        HelloMessage helloMessage;
+        Object redisResult = redisUtil.get(key);
+        if (null == redisResult){
+            helloMessage = DBMap.get(key);
+        }else {
+            helloMessage = (HelloMessage) redisResult;
+        }
+
+        return Collections.singleton(helloMessage);
     }
 
+    // sortSet方式存取数据
+    //redisUtil.setSorted(message.getKey(),message.getValue(),message.getScore());
     @Override
     public boolean setHelloMsg(HelloMessage message) {
-        DBMap.put(String.valueOf(DBIndex.addAndGet(1)),message);
-//        redisUtil.setSorted(message.getKey(),message.getValue(),message.getScore());
-        return true;
+        String key = String.valueOf(DBIndex.addAndGet(1));
+        boolean redisResult = false;
+        if (!DBMap.containsKey(key)){
+            DBMap.put(key,message);
+            redisResult = redisUtil.set(key, message);
+        }
+        return redisResult;
     }
 
 }
