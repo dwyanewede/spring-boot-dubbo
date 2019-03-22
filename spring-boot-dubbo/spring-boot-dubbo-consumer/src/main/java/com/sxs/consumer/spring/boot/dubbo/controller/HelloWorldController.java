@@ -20,9 +20,13 @@ public class HelloWorldController {
     @Autowired
     private ServiceConsumer serviceConsumer;
 
+    //测试案例
+    // http://localhost:7070/get/hello/msg?key=1
     @GetMapping("/hello")
     public String hello(@RequestParam String name){
         String res = serviceConsumer.doSayHello(name);
+        // 模拟异常
+        // int i = 1/0;
         System.err.println("rpc调用返回结果： " +res);
         return res;
     }
@@ -30,6 +34,15 @@ public class HelloWorldController {
     public Collection<HelloMessage> getHelloMsg(String key) {
         return serviceConsumer.getHelloMsg(key);
     }
+   //测试案例
+    /**
+     * http://localhost:7070/post/hello/msg
+     * {
+     * 	"key":"sxs",
+     * 	"value":"beautiful",
+     * 	"score":"1.2"
+     * }
+     */
     @PostMapping("/post/hello/msg")
     public boolean setHelloMsg(@RequestBody HelloMessage message) {
         return serviceConsumer.setHelloMsg(message);
